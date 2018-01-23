@@ -1,0 +1,24 @@
+{
+  "name": "aws-key-auditor",
+  "version": "1.0.0",
+  "description": "Audit AWS keys and notify when there are old ones",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bufferapp/aws-key-auditor.git"
+  },
+  "author": "hharnisc@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bufferapp/aws-key-auditor/issues"
+  },
+  "homepage": "https://github.com/bufferapp/aws-key-auditor#readme",
+  "dependencies": {
+    "aws-sdk": "^2.186.0",
+    "dotenv": "^4.0.0",
+    "moment": "^2.20.1"
+  }
+}
