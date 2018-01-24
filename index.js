@@ -41,7 +41,7 @@ const sendEmail = async ({
   expiredKeys,
 }) => {
   const msg = {
-    to: 'dan@buffer.com', //aws@buffer.com
+    to: 'harrison@buffer.com', //aws@buffer.com
     from: 'aws-key-auditor@buffer.com',
     subject: `Found AWS Keys That Require Action (${moment().format('MMM Do, YYYY')})`,
     text: 'please request a text version',
