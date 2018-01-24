@@ -1,0 +1,45 @@
+<body>
+<h1>Found AWS Keys That Require Action</h1>
+<table
+  style="width: 100%;"
+>
+<tr
+  style="text-align: left;"
+>
+  <th>Status</th>
+  <th>
+    User
+  </th>
+  <th>
+    KeyID
+  </th>
+  <th>
+    Days Old
+  </th>
+</tr>
+{{#each expiredKeys}}
+<tr>
+  <td style="background: #EB5757; color: white;" >Expired</td>
+  <td>{{user}}</td>
+  <td>{{keyId}}</td>
+  <td>{{daysOld}}</td>
+</tr>
+{{/each}}
+{{#each inactiveKeys}}
+<tr>
+  <td style="background: #F2994A; color: white;" >Inactive</td>
+  <td>{{user}}</td>
+  <td>{{keyId}}</td>
+  <td>{{daysOld}}</td>
+</tr>
+{{/each}}
+{{#each expireSoonKeys}}
+<tr>
+  <td style="background: #F2C94C; color: black;">Expires Soon</td>
+  <td>{{user}}</td>
+  <td>{{keyId}}</td>
+  <td>{{daysOld}}</td>
+</tr>
+{{/each}}
+</table>
+</body>
