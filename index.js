@@ -1,7 +1,9 @@
-require('dotenv').config()
+const { join, resolve } = require('path')
+require('dotenv').config({
+  path: resolve(__dirname, 'env/env')
+})
 const { promisify } = require('util')
 const { readFile } = require('fs')
-const { join } = require('path')
 const { compile } = require('handlebars')
 const moment = require('moment')
 const AWS = require('aws-sdk')
