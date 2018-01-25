@@ -31,6 +31,7 @@ const generateHtmlEmail = async ({
     inactiveKeys,
     expireSoonKeys,
     expiredKeys,
+    daysError,
   });
   return html
 }
@@ -41,7 +42,7 @@ const sendEmail = async ({
   expiredKeys,
 }) => {
   const msg = {
-    to: 'harrison@buffer.com', //aws@buffer.com
+    to: process.env.EMAIL_TO,
     from: 'aws-key-auditor@buffer.com',
     subject: `Found AWS Keys That Require Action (${moment().format('MMM Do, YYYY')})`,
     text: 'please request a text version',
@@ -105,8 +106,9 @@ const main = async () => {
       expireSoonKeys,
       expiredKeys,
     })
+  } else {
+      console.log('There are no keys that require action')
   }
-
 }
 
 try {
