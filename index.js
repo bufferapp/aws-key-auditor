@@ -45,7 +45,8 @@ const sendEmail = async ({
 }) => {
   const msg = {
     to: process.env.EMAIL_TO,
-    from: 'aws-key-auditor@buffer.com',
+    from: process.env.EMAIL_FROM,
+    replyTo: process.env.EMAIL_REPLY_TO,
     subject: `Found AWS Keys That Require Action (${moment().format('MMM Do, YYYY')})`,
     text: 'please request a text version',
     html: await generateHtmlEmail({
