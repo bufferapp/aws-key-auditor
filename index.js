@@ -81,9 +81,9 @@ const main = async () => {
         })
       } else if (
         key.Status === 'Active' &&
-        daysOld > daysWarn
+        daysOld > daysWarn && daysOld <= daysError
       ) {
-        console.log(`Found Key That Will Exipire Soon: ${UserName} - ${key.AccessKeyId} - ${daysOld} days old`)
+        console.log(`Found Key That Will Expire Soon: ${UserName} - ${key.AccessKeyId} - ${daysOld} days old`)
         expireSoonKeys.push({
           user: UserName,
           keyId: key.AccessKeyId,
@@ -94,7 +94,7 @@ const main = async () => {
         key.Status === 'Active' &&
         daysOld > daysError
       ) {
-        console.log(`Found Exipired Key: ${UserName} - ${key.AccessKeyId} - ${daysOld} days old`)
+        console.log(`Found Expired Key: ${UserName} - ${key.AccessKeyId} - ${daysOld} days old`)
         expiredKeys.push({
           user: UserName,
           keyId: key.AccessKeyId,
