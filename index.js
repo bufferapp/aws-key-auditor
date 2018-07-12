@@ -27,7 +27,7 @@ const generateHtmlEmail = async ({
   expireSoonKeys,
   expiredKeys,
 }) => {
-  const template = await readFileAsync(join(__dirname, './email.html'))
+  const template = await readFileAsync(join(__dirname, './summaryemail.html'))
   const compiledTemplate = compile(template.toString())
   const html = compiledTemplate({
     inactiveKeys,
@@ -58,6 +58,48 @@ const sendEmail = async ({
   sgMail.send(msg)
 }
 
+const getKeyDetails = async ({
+  keyNames
+}) => {
+  const keyInfoFileContents = await readFileAsync(join(__dirname, './keys.info'))
+  var keysToReturn = {}
+  keyListInfo = JSON.parse(keyInfoFileContents)
+  keyListInfo.keys.forEach((keyInfo) => {
+    if (keyNames.indexOf(keyInfo.name) != -1) {
+      keysToReturn[keyInfo.name] = keyInfo
+    }
+  })
+  return keysToReturn
+}
+
+const sendRemindersForExpiredKeys = async({
+  expiredKeys
+}) => {
+  expiredKeyMailTemplate = await readFileAsync(join(__dirname, './reminderemail.html'))
+  keyListInfo = await getKeyDetails({
+    keyNames: expiredKeys,
+  })
+  
+  expiredKeys.forEach((expiredKey) => {
+    console.log("sending a mail for " + expiredKey)
+    var compiledExpiredEmail = compile(expiredKeyMailTemplate.toString())
+    var htmlToSend = compiledExpiredEmail({
+      recipients: keyListInfo[expiredKey].recipients.map(recipient => {return recipient.name}).join("/"),
+      keyToRotate: expiredKey
+    })
+    var msg = {
+      to: keyListInfo[expiredKey].recipients.map(recipient => {return recipient.email}),
+      cc: process.env.TEMP_REMINDERS_TO,
+      from: process.env.EMAIL_FROM,
+      replyTo: process.env.EMAIL_REPLY_TO,
+      subject: `[Alert] Your AWS key requires rotation`,
+      text: 'please request a text version',
+      html: htmlToSend
+    }
+    sgMail.send(msg)
+  })
+
+}
 const main = async () => {
   const now = moment()
   const inactiveKeys = []
@@ -109,13 +151,19 @@ const main = async () => {
       expireSoonKeys,
       expiredKeys,
     })
+    if (expiredKeys.length) {
+      await sendRemindersForExpiredKeys({
+        expiredKeys
+      })
+    }
   } else {
       console.log('There are no keys that require action')
   }
 }
 
 try {
-  main()
+  //main()
+  testReadingFileDetails()
 } catch (err) {
   console.log(err)
 }

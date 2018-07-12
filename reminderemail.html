@@ -1,0 +1,32 @@
+<body>
+    <p>Hey {{recipients}}</p>
+
+    <p>As part of the team's ongoing efforts to keep up with best practices in their security, we are continuously rotating our AWS keys every 90 days. The following key currently requires rotation:</p>
+
+    <p><pre>{{keyToRotate}}</pre></p>
+    
+    <p>For more context on the rotation and how we are approaching them there's <a href="https://discourse.buffer.com/t/small-change-in-approach-to-rotating-aws-keys-important-for-team-leads/5025">a discourse here</a>. I'll be happy to answer any queries regarding this too. The important part is:</p>
+    
+    <blockquote>When rotating keys we need teams/individuals to also setup a _QA doc documenting the process of how to test that the key rotations completed successfully_. (observing monitors, logs, running manual verification tests like making an API call, etc). A dropbox paper for this has been setup [here](https://paper.dropbox.com/doc/Guides-for-Individual-AWS-Key-Rotations-UIVFDIwAHdBr0V1ABrUwH).</blockquote> 
+    
+    <h3>Some additional resources that might be helpful</h3>
+    
+    <ul>
+        <li>The key directory that notes locations where keys have been used is <a href="https://docs.google.com/spreadsheets/d/1xzTuU2811X06apxpJ3OjjjCL6bjMQ_ln9wLp_LNk9zc">here</a></li>
+        <li>Documentation for rotating keys has been provided <a href="https://paper.dropbox.com/doc/Rotating-AWS-keys.-A-manual-1y8LDAil88lSWIN3gSNiE">here</a></li>
+    </ul>
+    
+    <h3>A Note about the QA checklist</h3>
+    
+    <p>Regarding the QA Process document, a lightweight checklist/bullet point list would be good enough. It just needs enough details to allow anyone else even outside of the team to follow along and rotate keys confidently on their own. We'll also be using these docs to gather information on how teams rotate keys so that we can try and make things more efficient with some standardization.</p>
+    
+    <p>In the documentation I mentioned above I've also provided a QA template towards the end. That QA template is how I would document rotating keys for Bufferbotbrains. You can <a href="https://paper.dropbox.com/doc/Rotating-AWS-keys.-A-manual-1y8LDAil88lSWIN3gSNiE#:uid=524430110514585177638402&h2=A-Sample-QA-Process/Checklist">check it out here.</a></p>
+    
+    <hr>
+    
+    <p>Apologies if this feels like it might cut into any scheduled work. Do let me know if it does. Also, feel free to reach out to me for any other clarifications or questions.</p>
+    
+    <p>Thanks a lot :)</p>
+    
+    <p>Adnan</p>
+</body>
