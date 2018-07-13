@@ -55,7 +55,7 @@ const sendEmail = async ({
       expiredKeys,
     }),
   }
-  sgMail.send(msg)
+  //sgMail.send(msg)
 }
 
 const getKeyDetails = async ({
@@ -75,28 +75,35 @@ const getKeyDetails = async ({
 const sendRemindersForExpiredKeys = async({
   expiredKeys
 }) => {
+  console.log(expiredKeys)
   expiredKeyMailTemplate = await readFileAsync(join(__dirname, './reminderemail.html'))
   keyListInfo = await getKeyDetails({
     keyNames: expiredKeys,
   })
   
   expiredKeys.forEach((expiredKey) => {
-    console.log("sending a mail for " + expiredKey)
+    
     var compiledExpiredEmail = compile(expiredKeyMailTemplate.toString())
-    var htmlToSend = compiledExpiredEmail({
-      recipients: keyListInfo[expiredKey].recipients.map(recipient => {return recipient.name}).join("/"),
-      keyToRotate: expiredKey
-    })
-    var msg = {
-      to: keyListInfo[expiredKey].recipients.map(recipient => {return recipient.email}),
-      cc: process.env.TEMP_REMINDERS_TO,
-      from: process.env.EMAIL_FROM,
-      replyTo: process.env.EMAIL_REPLY_TO,
-      subject: `[Alert] Your AWS key requires rotation`,
-      text: 'please request a text version',
-      html: htmlToSend
+    if (keyListInfo[expiredKey] && keyListInfo[expiredKey].recipients){
+      console.log("sending a mail for " + expiredKey)
+      var htmlToSend = compiledExpiredEmail({
+        recipients: keyListInfo[expiredKey].recipients.map(recipient => {return recipient.name}).join("/"),
+        keyToRotate: expiredKey
+      })
+      var msg = {
+        to: keyListInfo[expiredKey].recipients.map(recipient => {return recipient.email}),
+        cc: process.env.TEMP_REMINDERS_TO,
+        from: process.env.EMAIL_FROM,
+        replyTo: process.env.EMAIL_REPLY_TO,
+        subject: `[Alert] Your AWS key requires rotation`,
+        text: 'please request a text version',
+        html: htmlToSend
+      }
+      sgMail.send(msg)
+    } else {
+      console.log("Couldn't find recipient info for " + expiredKey)
     }
-    sgMail.send(msg)
+    
   })
 
 }
@@ -105,7 +112,9 @@ const main = async () => {
   const inactiveKeys = []
   const expireSoonKeys = []
   const expiredKeys = []
+  const keysToSendReminderMailsFor = []
   const { Users: users} = await iam.listUsers({}).promise()
+  stopChecking = false
   // audit each user's one by one
   for (const UserName of users.map(user => user.UserName)) {
     console.log(`Auditing Keys For User: ${UserName}`)
@@ -123,7 +132,7 @@ const main = async () => {
         })
       } else if (
         key.Status === 'Active' &&
-        daysOld > daysWarn && daysOld <= daysError
+        daysOld > daysWarn && daysOld < daysError
       ) {
         console.log(`Found Key That Will Expire Soon: ${UserName} - ${key.AccessKeyId} - ${daysOld} days old`)
         expireSoonKeys.push({
@@ -134,7 +143,7 @@ const main = async () => {
       }
       if (
         key.Status === 'Active' &&
-        daysOld > daysError
+        daysOld >= daysError
       ) {
         console.log(`Found Expired Key: ${UserName} - ${key.AccessKeyId} - ${daysOld} days old`)
         expiredKeys.push({
@@ -142,6 +151,10 @@ const main = async () => {
           keyId: key.AccessKeyId,
           daysOld,
         })
+        if (daysOld == daysError || (daysOld-daysError)%8== 0) {
+          console.log("adding key reminder for " + UserName)
+          keysToSendReminderMailsFor.push(UserName)
+        }
       }
     })
   }
@@ -151,19 +164,18 @@ const main = async () => {
       expireSoonKeys,
       expiredKeys,
     })
-    if (expiredKeys.length) {
-      await sendRemindersForExpiredKeys({
-        expiredKeys
-      })
-    }
   } else {
       console.log('There are no keys that require action')
+  }
+  if (keysToSendReminderMailsFor.length) {
+    await sendRemindersForExpiredKeys({
+      expiredKeys: keysToSendReminderMailsFor
+    })
   }
 }
 
 try {
-  //main()
-  testReadingFileDetails()
+  main()
 } catch (err) {
   console.log(err)
 }
