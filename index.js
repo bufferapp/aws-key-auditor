@@ -151,7 +151,7 @@ const main = async () => {
           keyId: key.AccessKeyId,
           daysOld,
         })
-        if (daysOld == daysError || (daysOld-daysError)%8== 0) {
+        if (daysOld == daysError || (daysOld-daysError)%12== 0) {
           console.log("adding key reminder for " + UserName)
           keysToSendReminderMailsFor.push(UserName)
         }
