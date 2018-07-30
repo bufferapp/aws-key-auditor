@@ -1,10 +1,15 @@
 <body>
     <p>Hey {{recipients}}</p>
 
-    <p>As part of the team's ongoing efforts to keep up with best practices in their security, we are continuously rotating our AWS keys every 90 days. The following key currently requires rotation:</p>
-
-    <p><pre>{{keyToRotate}}</pre></p>
-    
+    <p>As part of the team's ongoing efforts to keep up with best practices in their security, we are continuously rotating our AWS keys every 90 days. The following key currently requires rotation: <strong><pre>{{keyToRotate}}</pre></strong></p>.
+    {{#if locations}}
+    <p>The notes for the key and locations in which this key has been used are as follows:</p>
+    <ul>
+        {{#each locations}}
+        <li>{{this}}</li>
+        {{/each}}
+    </ul>
+    {{/if}}
     <p>For more context on the rotation and how we are approaching them there's <a href="https://discourse.buffer.com/t/small-change-in-approach-to-rotating-aws-keys-important-for-team-leads/5025">a discourse here</a>. I'll be happy to answer any queries regarding this too. The important part is:</p>
     
     <blockquote>When rotating keys we need teams/individuals to also setup a _QA doc documenting the process of how to test that the key rotations completed successfully_. (observing monitors, logs, running manual verification tests like making an API call, etc). A dropbox paper for this has been setup [here](https://paper.dropbox.com/doc/Guides-for-Individual-AWS-Key-Rotations-UIVFDIwAHdBr0V1ABrUwH).</blockquote> 

@@ -84,10 +84,19 @@ const sendRemindersForExpiredKeys = async ({
     const compiledExpiredEmail = compile(expiredKeyMailTemplate.toString());
     if (keyListInfo[expiredKey] && keyListInfo[expiredKey].recipients) {
       console.log(`sending a mail for ${expiredKey}`);
-      const htmlToSend = compiledExpiredEmail({
-        recipients: keyListInfo[expiredKey].recipients.map(recipient => recipient.name).join('/'),
-        keyToRotate: expiredKey,
-      });
+      let htmlToSend;
+      if (keyListInfo[expiredKey].type === 'application') {
+        htmlToSend = compiledExpiredEmail({
+          recipients: keyListInfo[expiredKey].recipients.map(recipient => recipient.name).join('/'),
+          keyToRotate: expiredKey,
+          locations: keyListInfo[expiredKey].locations,
+        });
+      } else {
+        htmlToSend = compiledExpiredEmail({
+          recipients: keyListInfo[expiredKey].recipients.map(recipient => recipient.name).join('/'),
+          keyToRotate: expiredKey,
+        });
+      }
       const msg = {
         to: keyListInfo[expiredKey].recipients.map(recipient => recipient.email),
         cc: process.env.TEMP_REMINDERS_TO,
