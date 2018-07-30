@@ -75,36 +75,7 @@ kubectl apply -f cronjob.yaml
 
 _Make changes to code, commit and push_
 
-Get the latest git hash
-
-```sh
-git rev-parse HEAD
-```
-
-Publish with the latest git hash as the version
-
-```
-./publish.sh <the git hash>
-```
-
-Update version in the `kube` repo
-
-```sh
-cd <kube repo root>/us-east1.buffer-k8s.com/internal/aws-key-auditor
-edit cronjob.yaml
-```
-
-Update the image version
-
-```
-image: bufferapp/aws-key-auditor:<the git hash>
-```
-
-Deploy the version
-
-```sh
-kubectl apply -f cronjob.yaml
-```
+Run `@bufferbot servicedeploy aws-key-auditor` to deploy. If you wish to deploy a branch, run `@bufferbot servicedeploy <branch-name> to aws-key-auditor`
 
 ### Updating environment variables
 
