@@ -9,6 +9,7 @@ COPY package.json /usr/src/app
 RUN npm install
 
 COPY index.js /usr/src/app
-COPY email.html /usr/src/app
+COPY summaryemail.html /usr/src/app
+COPY reminderemail.html /usr/src/app
 
 CMD npm start
