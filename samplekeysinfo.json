@@ -1,0 +1,28 @@
+{
+  "keys":[
+    {
+      "name": "team-member",
+      "type": "personal",
+      "recipients": [
+        {
+          "name": "Team Member",
+          "email": "team-member@company.com"
+        }
+      ]
+    },
+    {
+      "name": "application-key",
+      "type": "application",
+      "recipients": [
+        {
+          "name": "Team Member",
+          "email": "team-member@company.com"
+        },
+        {
+          "name": "Team Group",
+          "email": "team-group@company.com"
+        }
+      ]
+    }
+  ]
+}
