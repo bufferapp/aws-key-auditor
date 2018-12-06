@@ -11,10 +11,10 @@ const sgMail = require('@sendgrid/mail')
 
 const readFileAsync = promisify(readFile)
 
-AWS.config.update({
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-})
+// AWS.config.update({
+//   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+//   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+// })
 const iam = new AWS.IAM()
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
