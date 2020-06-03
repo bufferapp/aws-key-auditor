@@ -1,5 +1,5 @@
 name: aws-key-auditor-helm
-namespace: tools-internal
+namespace: buffer
 chart: "buffercharts/buffer-cronjob"
 chartVersion: "1.0.6"
 cdEnabled: false
