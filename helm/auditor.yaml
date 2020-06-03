@@ -1,0 +1,25 @@
+name: aws-key-auditor
+namespace: tools-internal
+chart: "buffercharts/buffer-cronjob"
+chartVersion: "1.0.6"
+cdEnabled: false
+cdBranchEnabled: false
+dockerfile: Dockerfile
+channel: "eng-proj-kuberdash"
+clusterName: "kubeeast"
+track: stable
+image:
+  repository: bufferapp/aws-key-auditor
+  pullPolicy: Always
+schedule: "10 0 * * *"
+env:
+extraMainContainerValues:
+  volumes:
+    - name: env
+      secret:
+        defaultMode: 420
+        secretName: aws-key-auditor-env
+    - configMap:
+        defaultMode: 420
+        name: aws-key-auditor-key-info
+      name: keyinfo
