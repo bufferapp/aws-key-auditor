@@ -1,7 +1,7 @@
 name: aws-key-auditor-helm
 namespace: buffer
 chart: "buffercharts/buffer-cronjob"
-chartVersion: "1.0.6"
+chartVersion: "1.0.8"
 cdEnabled: false
 cdBranchEnabled: false
 dockerfile: Dockerfile
